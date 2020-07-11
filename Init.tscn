@@ -1,0 +1,151 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Init.gd" type="Script" id=1]
+[ext_resource path="res://assets/title.png" type="Texture" id=2]
+[ext_resource path="res://assets/prompt.png" type="Texture" id=3]
+[ext_resource path="res://assets/icons/normal/download.svg" type="Texture" id=4]
+[ext_resource path="res://assets/icons/hover/download.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/pressed/download.svg" type="Texture" id=6]
+[ext_resource path="res://assets/icons/disabled/download.svg" type="Texture" id=7]
+[ext_resource path="res://assets/icons/disabled/delete.svg" type="Texture" id=8]
+[ext_resource path="res://assets/icons/hover/play.svg" type="Texture" id=9]
+[ext_resource path="res://assets/icons/normal/delete.svg" type="Texture" id=10]
+[ext_resource path="res://assets/icons/normal/play.svg" type="Texture" id=11]
+[ext_resource path="res://assets/icons/pressed/play.svg" type="Texture" id=12]
+[ext_resource path="res://assets/icons/disabled/play.svg" type="Texture" id=13]
+[ext_resource path="res://assets/icons/pressed/delete.svg" type="Texture" id=14]
+[ext_resource path="res://assets/icons/hover/delete.svg" type="Texture" id=15]
+[ext_resource path="res://ProgressBar.gd" type="Script" id=16]
+
+[node name="Init" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PCKRequest" type="HTTPRequest" parent="."]
+use_threads = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 50
+custom_constants/margin_top = 50
+custom_constants/margin_left = 50
+custom_constants/margin_bottom = 50
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UI" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 974.0
+margin_bottom = 550.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Title" type="TextureRect" parent="MarginContainer/UI"]
+margin_right = 924.0
+margin_bottom = 99.0
+texture = ExtResource( 2 )
+stretch_mode = 4
+
+[node name="Elements" type="CenterContainer" parent="MarginContainer/UI"]
+margin_top = 103.0
+margin_right = 924.0
+margin_bottom = 500.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/UI/Elements"]
+margin_left = 368.0
+margin_top = 156.0
+margin_right = 556.0
+margin_bottom = 240.0
+
+[node name="Prompt" type="TextureRect" parent="MarginContainer/UI/Elements/VBoxContainer"]
+margin_right = 188.0
+margin_bottom = 36.0
+texture = ExtResource( 3 )
+
+[node name="VersionSelect" type="OptionButton" parent="MarginContainer/UI/Elements/VBoxContainer"]
+margin_top = 40.0
+margin_right = 188.0
+margin_bottom = 60.0
+
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/UI/Elements/VBoxContainer"]
+margin_top = 64.0
+margin_right = 188.0
+margin_bottom = 84.0
+alignment = 1
+
+[node name="DownloadContainer" type="CenterContainer" parent="MarginContainer/UI/Elements/VBoxContainer/Buttons"]
+margin_right = 60.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Download" type="TextureButton" parent="MarginContainer/UI/Elements/VBoxContainer/Buttons/DownloadContainer"]
+margin_left = 20.0
+margin_right = 40.0
+margin_bottom = 20.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 5 )
+texture_disabled = ExtResource( 7 )
+stretch_mode = 3
+
+[node name="DeleteContainer" type="CenterContainer" parent="MarginContainer/UI/Elements/VBoxContainer/Buttons"]
+margin_left = 64.0
+margin_right = 124.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Delete" type="TextureButton" parent="MarginContainer/UI/Elements/VBoxContainer/Buttons/DeleteContainer"]
+margin_left = 19.0
+margin_right = 40.0
+margin_bottom = 20.0
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 14 )
+texture_hover = ExtResource( 15 )
+texture_disabled = ExtResource( 8 )
+stretch_mode = 3
+
+[node name="PlayContainer" type="CenterContainer" parent="MarginContainer/UI/Elements/VBoxContainer/Buttons"]
+margin_left = 128.0
+margin_right = 188.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Play" type="TextureButton" parent="MarginContainer/UI/Elements/VBoxContainer/Buttons/PlayContainer"]
+margin_left = 25.0
+margin_top = 4.0
+margin_right = 35.0
+margin_bottom = 16.0
+texture_normal = ExtResource( 11 )
+texture_pressed = ExtResource( 12 )
+texture_hover = ExtResource( 9 )
+texture_disabled = ExtResource( 13 )
+stretch_mode = 3
+
+[node name="Downloading" type="Popup" parent="."]
+margin_right = 602.0
+margin_bottom = 62.0
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="Downloading"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="request_completed" from="PCKRequest" to="." method="_on_PCKRequest_completed"]
+[connection signal="item_selected" from="MarginContainer/UI/Elements/VBoxContainer/VersionSelect" to="." method="_on_VersionSelect_item_selected"]
+[connection signal="pressed" from="MarginContainer/UI/Elements/VBoxContainer/Buttons/DownloadContainer/Download" to="." method="_on_Download_pressed"]
+[connection signal="pressed" from="MarginContainer/UI/Elements/VBoxContainer/Buttons/DeleteContainer/Delete" to="." method="_on_Delete_pressed"]
+[connection signal="pressed" from="MarginContainer/UI/Elements/VBoxContainer/Buttons/PlayContainer/Play" to="." method="_on_Play_pressed"]
